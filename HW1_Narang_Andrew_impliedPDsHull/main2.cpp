@@ -64,6 +64,15 @@ int main()
     std::cout << "bond prof1 intermediate implied pd per year between yrs 3 and 5: " << prof1.ImpliedPD1(zeros1, rr0, prof1_y, pd3, 6) << std::endl;
     
   }
+
+  double rf_1yr = 0.0;
+  double rf_3yr = 0.0;
+  double rf_5yr = 0.0; 
+  
+  //Now we do the analysis for real bonds
+  {
+    //GE
+  }
   
   return 0;
 }
