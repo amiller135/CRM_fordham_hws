@@ -37,8 +37,10 @@ int main()
 	std::cout << mats[i] << "\t\t" << zeros[i] << "\t\t" << fwds[i] << std::endl;
       }
     */
+
+    double pd3 = prof0.ImpliedPD(zeros, rr0, prof0_y);
     
-    std::cout << "bond prof0 implied pd per year for this maturity: " << prof0.ImpliedPD(zeros, rr0, prof0_y) << std::endl;
+    std::cout << "bond prof0 implied pd per year for this maturity: " << pd3 << std::endl;
 
     //calculation of bond prof1 - second example
 
@@ -55,7 +57,11 @@ int main()
     std::vector<double> fwds1(mats1.size(), 0.0);
     FR_curve(zeros1, mats1, fwds1);
 
-    std::cout << "bond prof1 implied pd per year for this maturity: " << prof1.ImpliedPD(zeros1, rr0, prof1_y) << std::endl;
+    double pd5 = prof1.ImpliedPD(zeros1, rr0, prof1_y);
+
+    std::cout << "bond prof1 implied pd per year for this maturity: " << pd5 << std::endl;
+
+    std::cout << "bond prof1 intermediate implied pd per year between yrs 3 and 5: " << prof1.ImpliedPD1(zeros1, rr0, prof1_y, pd3, 6) << std::endl;
     
   }
   

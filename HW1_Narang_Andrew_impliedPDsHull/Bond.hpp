@@ -66,7 +66,12 @@ public:
   //input arguments are vector of risk-free rates, recovery rate of this security
   //in_yld0 = market yield of this security
   //this assumes a constant default probability per period
-  double ImpliedPD(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0) const; 
+  double ImpliedPD(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0) const;
+
+  //this function calculates the intermediate default intensity
+  //in_prdi = prior default intensity
+  //in_break = index after maturity that will be covered by prior default intensity
+  double ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0, const double& in_prdi, const int& in_break) const; 
 
 };
 
