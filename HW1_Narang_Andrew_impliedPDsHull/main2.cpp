@@ -108,14 +108,14 @@ int main()
 
     //GE 3year
     //matures on 10/09/22
-    //next coupon date is on 5/09/2020
+    //next coupon date is on 04/09/2020
     double coupon3 = 2.7/100.0;
 
     int pmts_left3 = (2022 - 2019) * freq;
 
     std::vector<double> mats3(pmts_left3, 0.0);
 
-    mats3[0] = (8.0 + 9.0 + 6.0 * 30.0)/360.0;
+    mats3[0] = (8.0 + 9.0 + 5.0 * 30.0)/360.0;
     for (int i = 1; i < pmts_left3; ++i) mats3[i] = mats3[0] + 0.5 * i;
 
     Bond GE3(mats3, coupon3, mats3[pmts_left3 - 1], freq);
@@ -164,6 +164,7 @@ int main()
     
   }
 
+  std::cout << "\nA = AAPL:" << std::endl;
   {
     //AAPL 1 year
     //matures on 11/13/20
@@ -176,78 +177,330 @@ int main()
     std::vector<double> mats1(pmts_left1, 0.0);
     mats1[0] = (8.0 + 13.0)/360.0;
     for (int i = 1; i < pmts_left1; ++i) mats1[i] = mats1[0] + (0.5 * i);
+    ///generic naming from here on out
+    Bond A1(mats1, coupon1, mats1[pmts_left1 - 1], freq);
     
-    Bond aapl1(mats1, coupon1, mats1[pmts_left1 - 1], freq);
+    double A1px = 100.264/100.0;
+    double A1y = A1.Yield(A1px, 0.1, 0.000001);
     
-    double aapl1px = 100.264/100.0;
-    ///////////////////////UPDATE FROM HERE ON 
-    double GE1y = GE1.Yield(GE1px, 0.1, 0.000001);
-    
-    std::cout << "GE1 yield: " << GE1y << std::endl;
+    std::cout << "A1 yield: " << A1y << std::endl;
     
     std::vector<double> zeros1(mats1.size(), rf_1yr);
     
-    double GE1_pd = GE1.ImpliedPD(zeros1, rr0, GE1y);
+    double A1_pd = A1.ImpliedPD(zeros1, rr0, A1y);
     
-    std::cout << "GE1 implied pd: " << GE1_pd << std::endl;
+    std::cout << "A1 implied pd: " << A1_pd << std::endl;
     
-    //GE 3year
-    //matures on 10/09/22
-    //next coupon date is on 5/09/2020
-    double coupon3 = 2.7/100.0;
+    //AAPL 3year
+    //matures on 09/11/22
+    //next coupon date is on 3/11/2020
+    double coupon3 = 1.7/100.0;
     
     int pmts_left3 = (2022 - 2019) * freq;
     
     std::vector<double> mats3(pmts_left3, 0.0);
     
-    mats3[0] = (7.0 + 9.0 + 6.0 * 30.0)/360.0;
+    mats3[0] = (8.0 + 11.0 + 4.0 * 30.0)/360.0;
     for (int i = 1; i < pmts_left3; ++i) mats3[i] = mats3[0] + 0.5 * i;
     
-    Bond GE3(mats3, coupon3, mats3[pmts_left3 - 1], freq);
+    Bond A3(mats3, coupon3, mats3[pmts_left3 - 1], freq);
     
-    double GE3px = 100.307/100.0;
-    double GE3y = GE3.Yield(GE3px, 0.1, 0.0001);
-    std::cout << "\nGE3 bond yield: " << GE3y << std::endl;
+    double A3px = 100.307/100.0;
+    double A3y = A3.Yield(A3px, 0.1, 0.0001);
+    std::cout << "\nA3 bond yield: " << A3y << std::endl;
     
     std::vector<double> zeros3(mats3.size(), rf_3yr);
     
-    double GE3_pd = GE3.ImpliedPD(zeros3, rr0, GE3y);
+    double A3_pd = A3.ImpliedPD(zeros3, rr0, A3y);
     
-    std::cout << "GE3 implied pd: " << GE3_pd << std::endl;
+    std::cout << "A3 implied pd: " << A3_pd << std::endl;
     
-    double GE13_pd = GE3.ImpliedPD1(zeros3, rr0, GE3y, GE1_pd, 2);
+    double A13_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A1_pd, 2);
     
-    std::cout << "GE13 intermediate pd: " << GE13_pd << std::endl;
+    std::cout << "A13 intermediate pd: " << A13_pd << std::endl;
     
-    //GE 5yr
-    //matures on 11/15/24
-    //next coupon date is 11/15/2019
-    double coupon5 = 4.2/100.0;
+    //AAPL 5yr
+    //matures on 05/06/24
+    //next coupon date is 12/06/2019
+    double coupon5 = 3.45/100.0;
     
     int pmts_left5 = (2024 - 2019) * freq;
     ++pmts_left5;  //still have one more coupon this year
     
     std::vector<double> mats5(pmts_left5, 0.0);
-    mats5[0] = (7.0 + 15.0)/360.0;
+    mats5[0] = (8.0 + 6.0 + 30.0)/360.0;
     for (int i = 1; i < pmts_left5; ++i) mats5[i] = mats5[0] + 0.5 * i;
     
-    Bond GE5(mats5, coupon5, mats5[pmts_left5 - 1], freq);
+    Bond A5(mats5, coupon5, mats5[pmts_left5 - 1], freq);
     
-    double GE5px = 100.957/100.0;
-    double GE5y = GE5.Yield(GE5px, 0.1, 0.0001);
-    std::cout << "\nGE5 bond yield: " << GE5y << std::endl;
+    double A5px = 100.957/100.0;
+    double A5y = A5.Yield(A5px, 0.1, 0.0001);
+    std::cout << "\nA5 bond yield: " << A5y << std::endl;
     
     std::vector<double> zeros5(mats5.size(), rf_5yr);
     
-    double GE5_pd = GE5.ImpliedPD(zeros5, rr0, GE5y);
+    double A5_pd = A5.ImpliedPD(zeros5, rr0, A5y);
     
-    std::cout << "GE5 implied pd: " << GE5_pd << std::endl;
+    std::cout << "A5 implied pd: " << A5_pd << std::endl;
     
-    double GE35_pd = GE5.ImpliedPD1(zeros5, rr0, GE5y, GE3_pd, 7);
+    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
     
-    std::cout << "GE35 intermediate pd: " << GE35_pd << std::endl;
+    std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
     
     }
+    
+  std::cout << "\nA = TSLA:" << std::endl;
+  {
+    //TSLA 2 year
+    //matures on 03/01/21
+    //next coupon date = 03/01/20
+    double coupon1 = 1.25/100.0;
+    
+    int pmts_left1 = (2021-2019) * freq;
+    --pmts_left1; //this bond matures sooner in 2021 than the others
+    
+    std::vector<double> mats1(pmts_left1, 0.0);
+    mats1[0] = (8.0 + 4.0 * 30.0)/360.0;
+    for (int i = 1; i < pmts_left1; ++i) mats1[i] = mats1[0] + (0.5 * i);
+    
+    Bond A2(mats1, coupon1, mats1[pmts_left1 - 1], freq);
+      
+    double A2px = 100.264/100.0;
+    double A2y = A2.Yield(A2px, 0.1, 0.000001);
+      
+    std::cout << "A2 yield: " << A2y << std::endl;
+      
+    std::vector<double> zeros1(mats1.size(), rf_2yr);
+      
+    double A2_pd = A2.ImpliedPD(zeros1, rr0, A2y);
+      
+    std::cout << "A2 implied pd: " << A2_pd << std::endl;
+      
+    //TSLA 3year
+    //matures on 03/15/22
+    //next coupon date is on 03/15/2020
+    double coupon3 = (2.0 + 3.0/8.0)/100.0;
+      
+    int pmts_left3 = (2022 - 2019) * freq;
+      
+    std::vector<double> mats3(pmts_left3, 0.0);
+      
+    mats3[0] = (8.0 + 15.0 + 4.0 * 30.0)/360.0;
+    for (int i = 1; i < pmts_left3; ++i) mats3[i] = mats3[0] + 0.5 * i;
+      
+    Bond A3(mats3, coupon3, mats3[pmts_left3 - 1], freq);
+      
+    double A3px = 100.307/100.0;
+    double A3y = A3.Yield(A3px, 0.1, 0.0001);
+    std::cout << "\nA3 bond yield: " << A3y << std::endl;
+      
+    std::vector<double> zeros3(mats3.size(), rf_3yr);
+      
+    double A3_pd = A3.ImpliedPD(zeros3, rr0, A3y);
+      
+    std::cout << "A3 implied pd: " << A3_pd << std::endl;
+      
+    double A23_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A2_pd, 2);
+      
+    std::cout << "A23 intermediate pd: " << A23_pd << std::endl;
+      
+    //TSLA 5yr
+    //matures on 05/15/24
+    //next coupon date is 12/15/2019
+    double coupon5 = 2.0/100.0;
+      
+    int pmts_left5 = (2024 - 2019) * freq;
+    ++pmts_left5;  //still have one more coupon this year
+      
+    std::vector<double> mats5(pmts_left5, 0.0);
+    mats5[0] = (8.0 + 15.0 + 30.0)/360.0;
+    for (int i = 1; i < pmts_left5; ++i) mats5[i] = mats5[0] + 0.5 * i;
+      
+    Bond A5(mats5, coupon5, mats5[pmts_left5 - 1], freq);
+      
+    double A5px = 100.957/100.0;
+    double A5y = A5.Yield(A5px, 0.1, 0.0001);
+    std::cout << "\nA5 bond yield: " << A5y << std::endl;
+      
+    std::vector<double> zeros5(mats5.size(), rf_5yr);
+      
+    double A5_pd = A5.ImpliedPD(zeros5, rr0, A5y);
+      
+    std::cout << "A5 implied pd: " << A5_pd << std::endl;
+      
+    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
+      
+    std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
+      
+  }
+    
+  std::cout << "\nA = MSFT:" << std::endl;
+  {
+    //MSFT 1 year
+    //matures on 10/01/20
+    //next coupon date = 04/01/20
+    double coupon1 = 3.0/100.0;
+      
+    int pmts_left1 = (2020-2019) * freq;
+      
+    std::vector<double> mats1(pmts_left1, 0.0);
+    mats1[0] = (8.0 + 5.0 * 30.0)/360.0;
+    for (int i = 1; i < pmts_left1; ++i) mats1[i] = mats1[0] + (0.5 * i);
+    ///generic naming from here on out
+    Bond A1(mats1, coupon1, mats1[pmts_left1 - 1], freq);
+      
+    double A1px = 100.264/100.0;
+    double A1y = A1.Yield(A1px, 0.1, 0.000001);
+      
+    std::cout << "A1 yield: " << A1y << std::endl;
+      
+    std::vector<double> zeros1(mats1.size(), rf_1yr);
+      
+    double A1_pd = A1.ImpliedPD(zeros1, rr0, A1y);
+      
+    std::cout << "A1 implied pd: " << A1_pd << std::endl;
+      
+    //MSFT 3year
+    //matures on 11/15/22
+    //next coupon date is on 11/15/2019
+    double coupon3 = (2.0 + 1.0/8.0)/100.0;
+      
+    int pmts_left3 = (2022 - 2019) * freq;
+    ++pmts_left3;   
+    std::vector<double> mats3(pmts_left3, 0.0);
+      
+    mats3[0] = (8.0 + 15.0)/360.0;
+    for (int i = 1; i < pmts_left3; ++i) mats3[i] = mats3[0] + 0.5 * i;
+      
+    Bond A3(mats3, coupon3, mats3[pmts_left3 - 1], freq);
+      
+    double A3px = 100.307/100.0;
+    double A3y = A3.Yield(A3px, 0.1, 0.0001);
+    std::cout << "\nA3 bond yield: " << A3y << std::endl;
+      
+    std::vector<double> zeros3(mats3.size(), rf_3yr);
+    
+    double A3_pd = A3.ImpliedPD(zeros3, rr0, A3y);
+    
+    std::cout << "A3 implied pd: " << A3_pd << std::endl;
+      
+    double A13_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A1_pd, 2);
+      
+    std::cout << "A13 intermediate pd: " << A13_pd << std::endl;
+
+    //MSFT 5 yr (really more like 4.5 yrs)
+    //matures on 02/06/24
+    //next coupon date is 02/06/2020
+    double coupon5 = (2.0 + 7.0/8.0)/100.0;
+      
+    int pmts_left5 = (2024 - 2019) * freq;
+    --pmts_left5;  //this bond matures sooner
+      
+    std::vector<double> mats5(pmts_left5, 0.0);
+    mats5[0] = (8.0 + 6.0 + 3.0 * 30.0)/360.0;
+    for (int i = 1; i < pmts_left5; ++i) mats5[i] = mats5[0] + 0.5 * i;
+      
+    Bond A5(mats5, coupon5, mats5[pmts_left5 - 1], freq);
+      
+    double A5px = 100.957/100.0;
+    double A5y = A5.Yield(A5px, 0.1, 0.0001);
+    std::cout << "\nA5 bond yield: " << A5y << std::endl;
+    
+    std::vector<double> zeros5(mats5.size(), rf_5yr);
+      
+    double A5_pd = A5.ImpliedPD(zeros5, rr0, A5y);
+      
+    std::cout << "A5 implied pd: " << A5_pd << std::endl;
+      
+    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
+      
+    std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
+      
+  }
+    
+  std::cout << "\nA = GS:" << std::endl;
+  {
+    //GS 1 year
+    //matures on 09/15/20
+    //next coupon date = 03/15/20
+    double coupon1 = 2.75/100.0;
+        
+    int pmts_left1 = (2020-2019) * freq;
+        
+    std::vector<double> mats1(pmts_left1, 0.0);
+    mats1[0] = (8.0 + 15.0 + 4 * 30.0)/360.0;
+    for (int i = 1; i < pmts_left1; ++i) mats1[i] = mats1[0] + (0.5 * i);
+    ///generic naming from here on out
+    Bond A1(mats1, coupon1, mats1[pmts_left1 - 1], freq);
+        
+    double A1px = 100.264/100.0;
+    double A1y = A1.Yield(A1px, 0.1, 0.000001);
+        
+    std::cout << "A1 yield: " << A1y << std::endl;
+        
+    std::vector<double> zeros1(mats1.size(), rf_1yr);
+        
+    double A1_pd = A1.ImpliedPD(zeros1, rr0, A1y);
+        
+    std::cout << "A1 implied pd: " << A1_pd << std::endl;
+        
+    //GS 3year
+    //matures on 10/31/22
+    //next coupon date is on 10/31/2019
+    double coupon3 = 2.876/100.0;
+        
+    int pmts_left3 = (2022 - 2019) * freq;
+    ++pmts_left3;
+    std::vector<double> mats3(pmts_left3, 0.0);
+        
+    mats3[0] = 9.0/360.0;
+    for (int i = 1; i < pmts_left3; ++i) mats3[i] = mats3[0] + 0.5 * i;
+        
+    Bond A3(mats3, coupon3, mats3[pmts_left3 - 1], freq);
+        
+    double A3px = 100.307/100.0;
+    double A3y = A3.Yield(A3px, 0.1, 0.0001);
+    std::cout << "\nA3 bond yield: " << A3y << std::endl;
+        
+    std::vector<double> zeros3(mats3.size(), rf_3yr);
+      
+    double A3_pd = A3.ImpliedPD(zeros3, rr0, A3y);
+      
+    std::cout << "A3 implied pd: " << A3_pd << std::endl;
+        
+    double A13_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A1_pd, 2);
+        
+    std::cout << "A13 intermediate pd: " << A13_pd << std::endl;
+
+    //GS 5 yr
+    //matures on 03/03/24
+    //next coupon date is 03/03/2020
+    double coupon5 = 4.0/100.0;
+        
+    int pmts_left5 = (2024 - 2019) * freq;
+    --pmts_left5;  //this bond matures sooner
+        
+    std::vector<double> mats5(pmts_left5, 0.0);
+    mats5[0] = (8.0 + 3.0 + 4.0 * 30.0)/360.0;
+    for (int i = 1; i < pmts_left5; ++i) mats5[i] = mats5[0] + 0.5 * i;
+        
+    Bond A5(mats5, coupon5, mats5[pmts_left5 - 1], freq);
+        
+    double A5px = 100.957/100.0;
+    double A5y = A5.Yield(A5px, 0.1, 0.0001);
+    std::cout << "\nA5 bond yield: " << A5y << std::endl;
+      
+    std::vector<double> zeros5(mats5.size(), rf_5yr);
+        
+    double A5_pd = A5.ImpliedPD(zeros5, rr0, A5y);
+        
+    std::cout << "A5 implied pd: " << A5_pd << std::endl;
+        
+    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
+        
+    std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
+        
+  }
     
     
   return 0;
