@@ -15,6 +15,7 @@ Bond::Bond(const std::vector<double>& in_mats, const double& in_coupon, const do
   for (int i = 0; i < mats.size(); ++i)
     {
       cfs[i] = coupon/freq;
+      //std::cout << cfs[i] << std::endl;
     }
 
   cfs[mats.size() - 1] += 1;
@@ -136,6 +137,8 @@ double Bond::ImpliedPD(const std::vector<double>& in_zeros, const double& in_rr,
   //calculate theoretical risk-free price at t0
   double rf_px0 = T_Price(in_zeros);
 
+  //std::cout << rf_px0 << std::endl;
+  
   //calculate theoretical risky price (from market) at t0
   double mk_px0 = Price(in_yld0);
 
