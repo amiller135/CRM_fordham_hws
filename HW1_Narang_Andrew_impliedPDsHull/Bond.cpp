@@ -273,13 +273,16 @@ double Bond::ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr
       
       //calculate loss given default @ this maturity, discount it back via corr. zero rate, and add it to the pv of all expected losses
       pv_lgds1 += (in_rr - px) * exp(-1.0 * in_zeros[i] * mats[i]);
+      //std::cout << pv_lgds1 << std::endl;
     }
 
   //now, we know the net present values of all losses given defaults after the initial period
      
   // return std::abs(mk_px0 - rf_px0)/std::abs(pv_lgds) * freq;
 
-  return (std::abs(mk_px0 - rf_px0) - std::abs(pv_lgds) * (in_prdi / freq))/std::abs(pv_lgds1) * 2; 
+  //std::cout << pv_lgds1 << std::endl;
+  
+  return (std::abs(mk_px0 - rf_px0) - std::abs(pv_lgds) * (in_prdi / freq))/std::abs(pv_lgds1) * freq; 
 }
 
 
