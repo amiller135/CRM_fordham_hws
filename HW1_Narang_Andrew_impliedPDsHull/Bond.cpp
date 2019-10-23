@@ -282,7 +282,7 @@ double Bond::ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr
 
   //std::cout << pv_lgds1 << std::endl;
   
-  return (std::abs(mk_px0 - rf_px0) - std::abs(pv_lgds) * (in_prdi / freq))/std::abs(pv_lgds1) * freq; 
+  return std::abs( (std::abs(mk_px0 - rf_px0) - std::abs(pv_lgds) * (in_prdi / freq))/std::abs(pv_lgds1) * freq ); 
 }
 
 
