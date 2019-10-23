@@ -2,9 +2,9 @@ import numpy as np
 import pandas as pd
 
 # ------------------------- Load/create transition matrices ----------------------#
-transition_1y = pd.read_csv("/Users/francescao/Credit_risk_mgt/transition_1year.csv")
-transition_3y = pd.read_csv("/Users/francescao/Credit_risk_mgt/transition_3year.csv")
-transition_5y = pd.read_csv("/Users/francescao/Credit_risk_mgt/transition_5year.csv")
+transition_1y = pd.read_csv("transition_1year.csv")
+transition_3y = pd.read_csv("transition_3year.csv")
+transition_5y = pd.read_csv("transition_5year.csv")
 transition_1y.index = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C']
 transition_3y.index = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C']
 transition_5y.index = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C']
