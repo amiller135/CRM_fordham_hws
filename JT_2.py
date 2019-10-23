@@ -9,12 +9,27 @@ transition_1y.index = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C']
 transition_3y.index = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C']
 transition_5y.index = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C']
 
+
+transition_1y.drop(columns='One Year',inplace=True)
+# .index.name='One Year'
+transition_1y.index.name='One Year'
+
+transition_3y.drop(columns='three year',inplace=True)
+# .index.name='One Year'
+transition_3y.index.name='three year'
+
+transition_5y.drop(columns='five year',inplace=True)
+# .index.name='One Year'
+transition_5y.index.name='five year'
+
 columns = ['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C']
 
 transition_2y = pd.DataFrame(index=['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C'])
 transition_2y.index.name = 'two year'
 for col in columns:
     transition_2y[col] = np.array(transition_1y[col] + (transition_3y[col] - transition_1y[col])/(3-1) * (2-1))
+
+
 
 
 transition_4y = pd.DataFrame(index=['AAA', 'AA', 'A', 'BBB', 'BB', 'B', 'CCC/C'])
@@ -46,7 +61,7 @@ def solve_pi(spread, rf_rates, lst_transitions, recovery_rate=0.60, rating='AA')
     pi_values = []
     for num in range(5):
         state_vector = np.array(lst_transitions[num].loc[rating].values)
-        state_vector = state_vector[1::]/100
+        state_vector = state_vector/100
         index = np.where(lst_index == rating)[0][0]
         state_vector[index] = -(1 - state_vector[index])
         D = - state_vector.sum()
@@ -54,7 +69,8 @@ def solve_pi(spread, rf_rates, lst_transitions, recovery_rate=0.60, rating='AA')
         rn = state_vector*pi
         risk_neutral_transition.append(rn)
         pi_values.append(pi)
-
+    for item in risk_neutral_transition:
+        item[index] = item[index] + 1
     return risk_neutral_transition, pi_values
 
 
