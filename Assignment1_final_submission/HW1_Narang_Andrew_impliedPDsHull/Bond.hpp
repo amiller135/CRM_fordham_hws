@@ -74,9 +74,11 @@ public:
   double ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0, const double& in_prdi, const int& in_break) const;
 
   //this function calculates the intermediate default intensity given two prior default intensities - good for 2 intermediary periods = 3 periods total
-  //in_prd1 = prior default intensity for intermediate period
-  //in_break1 = index after maturity that will be covered by intermediate default intensity 1
-  //double ImpliedPD2(
+  //in_prdi0 = prior default intensity for first intermediate period
+  //in_break0 = index after maturity that will be covered by intermediate default intensity 0 (first period)
+  //in_prdi1 = prior default intensity for second intermediate period
+  //in_break1 = index after maturity that will be coverd by intermediate default intensity 1 (second period)
+  double ImpliedPD2(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0, const double& in_prdi0, const int& in_break0, const double& in_prdi1, const int& in_break1) const;
 
 };
 
