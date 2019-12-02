@@ -1,0 +1,4 @@
+A = AAPL:
+A01 hazard rate: 0.0115052
+A13 hazard rate: 0.00442729
+A35 hazard rate: 0.0671125

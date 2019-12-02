@@ -1,0 +1,3 @@
+GE01 hazard rate: 0.0214476
+GE13 hazard rate: 0.0140091
+GE35 hazard rate: 0.0825216

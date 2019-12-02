@@ -1,0 +1,4 @@
+A = TSLA:
+A02 hazard rate: 0.0062807
+A23 hazard rate: 0.014796
+A35 hazard rate: 0.00122532

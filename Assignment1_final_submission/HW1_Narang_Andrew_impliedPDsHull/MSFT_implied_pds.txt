@@ -1,0 +1,11 @@
+A = MSFT:
+A1 yield: 0.0289004
+A1 implied pd: 0.0199685
+
+A3 bond yield: 0.0232201
+A3 implied pd: 0.0103892
+A13 intermediate pd: 0.00289421
+
+A5 bond yield: 0.0276799
+A5 implied pd: 0.0176101
+A35 intermediate pd: 0.0367306

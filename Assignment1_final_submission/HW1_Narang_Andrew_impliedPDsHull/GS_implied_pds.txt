@@ -1,0 +1,11 @@
+A = GS:
+A1 yield: 0.0275043
+A1 implied pd: 0.0170635
+
+A3 bond yield: 0.0322016
+A3 implied pd: 0.0222886
+A13 intermediate pd: 0.0264582
+
+A5 bond yield: 0.0385788
+A5 implied pd: 0.0333177
+A35 intermediate pd: 0.0560985

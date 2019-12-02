@@ -1,0 +1,11 @@
+A = AAPL:
+A1 yield: 0.0257971
+A1 implied pd: 0.0114393
+
+A3 bond yield: 0.0165254
+A3 implied pd: 0.000994527
+A13 intermediate pd: 0.00436698
+
+A5 bond yield: 0.0349321
+A5 implied pd: 0.0268201
+A35 intermediate pd: 0.0648455

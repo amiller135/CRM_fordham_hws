@@ -1,0 +1,4 @@
+A = GS:
+A01 hazard rate: 0.0172108
+A13 hazard rate: 0.0272864
+A35 hazard rate: 0.0590892

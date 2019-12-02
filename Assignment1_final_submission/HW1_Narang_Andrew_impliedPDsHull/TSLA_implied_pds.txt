@@ -1,0 +1,11 @@
+A = TSLA:
+A2 yield: 0.0118397
+A2 implied pd: 0.00626101
+
+A3 bond yield: 0.0233828
+A3 implied pd: 0.0117387
+A23 intermediate pd: 0.0145951
+
+A5 bond yield: 0.0193879
+A5 implied pd: 0.00515502
+A35 intermediate pd: 0.0012102

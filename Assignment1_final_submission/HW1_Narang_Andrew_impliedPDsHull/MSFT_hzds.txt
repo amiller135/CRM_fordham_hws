@@ -1,0 +1,4 @@
+A = MSFT:
+A01 hazard rate: 0.0201706
+A13 hazard rate: 0.00295755
+A35 hazard rate: 0.0378225
