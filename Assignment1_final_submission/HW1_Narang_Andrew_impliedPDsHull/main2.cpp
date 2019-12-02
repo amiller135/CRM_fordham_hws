@@ -4,6 +4,7 @@
 
 
 #include <iostream>
+#include <iomanip>
 #include <vector>
 
 #include "IR0.hpp"
@@ -61,7 +62,7 @@ int main()
 
     std::cout << "bond prof1 implied pd per year for this maturity: " << pd5 << std::endl;
 
-    std::cout << "bond prof1 intermediate implied pd per year between yrs 3 and 5: " << prof1.ImpliedPD1(zeros1, rr0, prof1_y, pd3, 6) << std::endl;
+    std::cout << "bond prof1 intermediate implied pd per year between yrs 3 and 5: " << std::fixed << std::setprecision(8) << prof1.ImpliedPD1(zeros1, rr0, prof1_y, pd3, 6) << std::endl;
     
   }
 
