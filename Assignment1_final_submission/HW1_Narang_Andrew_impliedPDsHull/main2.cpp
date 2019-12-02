@@ -1,6 +1,7 @@
 //Andrew Narang
 //Credit Risk Management - Assignment #1
 
+//All calculations are as of 10/22/19
 
 
 #include <iostream>
@@ -159,7 +160,8 @@ int main()
 
     std::cout << "GE5 implied pd: " << GE5_pd << std::endl;
 
-    double GE35_pd = GE5.ImpliedPD1(zeros5, rr0, GE5y, GE3_pd, 7);
+    //next 3 pmts are within approx. a year, so we use the implied unconditional pd from GE1 for them                                  
+    double GE35_pd = GE5.ImpliedPD2(zeros5, rr0, GE5y, GE1_pd, 3, GE13_pd, 7);
 
     std::cout << "GE35 intermediate pd: " << GE35_pd << std::endl;
     
@@ -243,12 +245,13 @@ int main()
     double A5_pd = A5.ImpliedPD(zeros5, rr0, A5y);
     
     std::cout << "A5 implied pd: " << A5_pd << std::endl;
-    
-    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
+
+    //next 3 pmts are within approx. a year, so we use the implied unconditional pd from A1 for them
+    double A35_pd = A5.ImpliedPD2(zeros5, rr0, A5y, A1_pd, 3, A13_pd, 7);
     
     std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
     
-    }
+  }
     
   std::cout << "\nA = TSLA:" << std::endl;
   {
@@ -328,8 +331,9 @@ int main()
     double A5_pd = A5.ImpliedPD(zeros5, rr0, A5y);
       
     std::cout << "A5 implied pd: " << A5_pd << std::endl;
-      
-    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
+
+    //next 3 pmts are within approx. a year, so we use the implied unconditional pd from A2 for them and the 2 after them
+    double A35_pd = A5.ImpliedPD2(zeros5, rr0, A5y, A2_pd, 5, A23_pd, 7); 
       
     std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
       
@@ -384,8 +388,9 @@ int main()
     double A3_pd = A3.ImpliedPD(zeros3, rr0, A3y);
     
     std::cout << "A3 implied pd: " << A3_pd << std::endl;
-      
-    double A13_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A1_pd, 2);
+
+    //since the next three payments are within roughly a year, we use A1_pd for all three of them
+    double A13_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A1_pd, 3);
       
     std::cout << "A13 intermediate pd: " << A13_pd << std::endl;
 
@@ -413,7 +418,7 @@ int main()
       
     std::cout << "A5 implied pd: " << A5_pd << std::endl;
       
-    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
+    double A35_pd = A5.ImpliedPD2(zeros5, rr0, A5y, A1_pd, 2, A13_pd, 6);
       
     std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
       
@@ -468,8 +473,9 @@ int main()
     double A3_pd = A3.ImpliedPD(zeros3, rr0, A3y);
       
     std::cout << "A3 implied pd: " << A3_pd << std::endl;
-        
-    double A13_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A1_pd, 2);
+
+    //next three coupon dates are effectively within a year, so we use A1_pd for all of them
+    double A13_pd = A3.ImpliedPD1(zeros3, rr0, A3y, A1_pd, 3);
         
     std::cout << "A13 intermediate pd: " << A13_pd << std::endl;
 
@@ -497,7 +503,7 @@ int main()
         
     std::cout << "A5 implied pd: " << A5_pd << std::endl;
         
-    double A35_pd = A5.ImpliedPD1(zeros5, rr0, A5y, A3_pd, 7);
+    double A35_pd = A5.ImpliedPD2(zeros5, rr0, A5y, A1_pd, 2, A13_pd, 6); 
         
     std::cout << "A35 intermediate pd: " << A35_pd << std::endl;
         
