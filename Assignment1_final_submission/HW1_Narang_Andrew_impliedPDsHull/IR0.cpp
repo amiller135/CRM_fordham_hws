@@ -114,7 +114,9 @@ double c2d(const std::vector<double>& pxs, const std::vector<double>& conv_fs, c
 
 
 //calculates the hazard rate given the unconditional default probability between [t, t + dt], the cumulative probability of default between [0, t], and dt (= 1 by default, representing 1 year)
-double hzd(const double& in_ucpd, const double& in_cpd, const double& dt)
+double hzd(const double& in_ucpd, const double& in_cupd, const double& dt)
 {
-  return in_ucpd/((1.0 - in_cpd) * dt);
+  double x =  in_ucpd/((1.0 - in_cupd) * dt);
+
+  return -log(1 - x)/dt; 
 }

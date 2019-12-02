@@ -48,6 +48,6 @@ void next_zero(const std::vector<double>& in_mats, std::vector<double>& in_zeros
 double c2d(const std::vector<double>& pxs, const std::vector<double>& conv_fs, const double& set_px, int& pos); 
 
 //calculates the hazard rate given the unconditional default probability between [t, t + dt], the cumulative probability of default between [0, t], and dt (= 1 by default, representing 1 year)
-double hzd(const double& in_ucpd, const double& in_cpd, const double& dt = 1);
+double hzd(const double& in_ucpd, const double& in_cupd, const double& dt = 1);
 
 #endif
