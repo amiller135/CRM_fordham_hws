@@ -125,10 +125,10 @@ double Bond::PV01(const double& in_y) const
 }
 
 
-//calculates implied probability of default, as per Hull's approach
+//calculates implied intermediate unconditional probability of default, as per Hull's approach
 //input arguments are vector of risk-free rates, recovery rate of this security
 //in_yld0 = market yield of this security
-//this assumes a constant default probability per period 
+//this assumes a constant unconditional default probability per period 
 double Bond::ImpliedPD(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0) const
 {
   //for (int i = 0; i < cfs.size(); ++i) std::cout << cfs[i] << ' '; 
@@ -188,9 +188,9 @@ double Bond::ImpliedPD(const std::vector<double>& in_zeros, const double& in_rr,
 }
 
 
-//this function calculates the intermediate default intensity
-//in_prdi = prior default intensity
-//in_break = index after maturity that will be covered by prior default intensity
+//this function calculates the constant, intermediate unconditional probability of default over a time period taking into account that of the previous time period
+//in_prdi = prior unconditional default probability per period
+//in_break = index after maturity that will be covered by in_prdi
 double Bond::ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0, const double& in_prdi, const int& in_break) const
 {
   //calculate theoretical risk-free price at t0
@@ -244,7 +244,7 @@ double Bond::ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr
     }
 
   //now, we know the net present values of all losses given defaults covered by the prior default intensity
-  //start at i = in_break since mat[in_break] = time of the first cash flow coveredy by intermediate default intensity
+  //start at i = in_break since mat[in_break] = time of the first cash flow covered by intermediate default intensity
   for (int i = in_break; i < mats.size(); ++i)
     {
       //first, calculate the risk-free price of the bond at this maturity using the forward curve
@@ -286,16 +286,142 @@ double Bond::ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr
 }
 
 
-//this function calculates the intermediate default intensity given two prior default intensities - good for 2 intermediary periods = 3 perioss total
-//in_prdi0 = prior default intensity for first intermediate period
-//in_break0 = index after maturity that will be covered by intermediate default intensity 0 (first period)
-//in_prdi1 = prior default intensity for second intermediate period
-//in_break1 = index after maturity that will be coverd by intermediate default intensity 1 (second period)
+//this function calculates the intermediate unconditional default probability given two prior ones - good for 2 intermediary periods = 3 periods total
+//in_prdi0 = prior unconditional default probability for first intermediate period
+//in_break0 = index after maturity that will be covered by in_prdi0 (first period)
+//in_prdi1 = prior unconditional default probability for second intermediate period
+//in_break1 = index after maturity that will be coverd by in_prdi1 (second period)
 double Bond::ImpliedPD2(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0, const double& in_prdi0, const int& in_break0, const double& in_prdi1, const int& in_break1) const
 {
+  //calculate theoretical risk-free price at t0
+  double rf_px0 = T_Price(in_zeros);
 
-  //updates needed
-  return 0;
+  //std::cout << rf_px0 << std::endl;
+  
+  //calculate theoretical risky price (from market) at t0
+  double mk_px0 = Price(in_yld0);
+
+  //set up the forward curve associated with the input zeros
+  std::vector<double> fwds(in_zeros.size(), 0.0);
+
+  FR_curve(in_zeros, mats, fwds);
+
+  //determine present value of total losses given defaults at each maturity
+
+  double pv_lgds = 0.0;
+
+  double pv_lgds1 = 0.0;
+
+  double pv_lgds2 = 0.0;
+  
+  //start at i = 0 since mat[0] = time of the next cash flow from time t = 0
+  for (int i = 0; i < in_break0; ++i)
+    {
+      //first, calculate the risk-free price of the bond at this maturity using the forward curve
+      double px = cfs[i];
+
+      //std::cout << px << std::endl;
+      
+      for (int i1 = i + 1; i1 < mats.size(); ++i1)
+	{
+	  //determine appropriate discounting factor
+	  double df = 1.0;
+	  
+	  for (int i2 = i1; i2 > i; --i2)
+	    {
+	      df *= exp(-1.0 * fwds[i2] * (mats[i2] - mats[i2 - 1]));
+	    }
+	  
+	  //std::cout << (cfs[i1] * df) << '\t';
+	  
+	  //add it to the present value
+	  px += (cfs[i1] * df);
+	}
+      //px is now = theoretical risk-free price of bond at this maturity
+
+      //std::cout << px << std::endl;
+      
+      //calculate loss given default @ this maturity, discount it back via corr. zero rate, and add it to the pv of all expected losses
+      pv_lgds += (in_rr - px) * exp(-1.0 * in_zeros[i] * mats[i]);
+    }
+
+  //now, we know the net present values of all losses given defaults covered by the prior default intensity
+  //start at i = in_break since mat[in_break] = time of the first cash flow covered by intermediate unconditional pd
+  for (int i = in_break0; i < in_break1; ++i)
+    {
+      //first, calculate the risk-free price of the bond at this maturity using the forward curve
+      double px = cfs[i];
+
+      //std::cout << px << std::endl;
+        
+      for (int i1 = i + 1; i1 < mats.size(); ++i1)
+	{
+	  //determine appropriate discounting factor
+	  double df = 1.0;
+	  
+	  for (int i2 = i1; i2 > i; --i2)
+	    {
+	      df *= exp(-1.0 * fwds[i2] * (mats[i2] - mats[i2 - 1]));
+	    }
+
+	  //std::cout << (cfs[i1] * df) << '\t';
+        
+	  //add it to the present value
+	  px += (cfs[i1] * df);
+	}
+      //px is now = theoretical risk-free price of bond at this maturity
+      
+      //std::cout << px << std::endl;
+      
+      //calculate loss given default @ this maturity, discount it back via corr. zero rate, and add it to the pv of all expected losses
+      pv_lgds1 += (in_rr - px) * exp(-1.0 * in_zeros[i] * mats[i]);
+      //std::cout << pv_lgds1 << std::endl;
+    }
+
+  //to determine Q3
+  //now, we know the net present values of all losses given defaults covered by the prior default intensity
+  //start at i = in_break since mat[in_break] = time of the first cash flow covered by intermediate unconditional pd
+  for (int i = in_break1; i < mats.size(); ++i)
+      {
+        //first, calculate the risk-free price of the bond at this maturity using the forward curve
+        double px = cfs[i];
+
+        //std::cout << px << std::endl;
+          
+        for (int i1 = i + 1; i1 < mats.size(); ++i1)
+	  {
+	    //determine appropriate discounting factor
+	    double df = 1.0;
+        
+	    for (int i2 = i1; i2 > i; --i2)
+	      {
+		df *= exp(-1.0 * fwds[i2] * (mats[i2] - mats[i2 - 1]));
+	      }
+
+	    //std::cout << (cfs[i1] * df) << '\t';
+          
+	    //add it to the present value
+	    px += (cfs[i1] * df);
+	  }
+        //px is now = theoretical risk-free price of bond at this maturity
+        
+        //std::cout << px << std::endl;
+        
+        //calculate loss given default @ this maturity, discount it back via corr. zero rate, and add it to the pv of all expected losses
+        pv_lgds2 += (in_rr - px) * exp(-1.0 * in_zeros[i] * mats[i]);
+        //std::cout << pv_lgds1 << std::endl;
+      }
+
+  //now, we know the net present values of all losses given defaults after the initial period
+     
+  // return std::abs(mk_px0 - rf_px0)/std::abs(pv_lgds) * freq;
+
+  //std::cout << pv_lgds1 << std::endl;
+  
+  //return std::abs( (std::abs(mk_px0 - rf_px0) - std::abs(pv_lgds) * (in_prdi / freq))/std::abs(pv_lgds1) * freq );
+
+  return std::abs( (std::abs(mk_px0 - rf_px0) - std::abs(pv_lgds) * (in_prdi0 / freq) - std::abs(pv_lgds1) * (in_prdi1 / freq))/std::abs(pv_lgds2) * freq);
+  
 }
   
 

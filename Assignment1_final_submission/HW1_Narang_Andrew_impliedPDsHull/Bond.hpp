@@ -62,22 +62,22 @@ public:
   //calculates PV01 = change in bond value for a 1 basis point (0.01%) change in the cont. compounded yield per annum 
   double PV01(const double& in_y) const;
 
-  //calculates implied probability of default, as per Hull's approach
+  //calculates implied intermediate unconditional probability of default, as per Hull's approach
   //input arguments are vector of risk-free rates, recovery rate of this security
   //in_yld0 = market yield of this security
   //this assumes a constant default probability per period
   double ImpliedPD(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0) const;
 
-  //this function calculates the intermediate default intensity
-  //in_prdi = prior default intensity
-  //in_break = index after maturity that will be covered by prior default intensity
+  //this function calculates the constant, intermediate unconditional probability of default over a time period taking into account that of the previous time period
+  //in_prdi = prior unconditional default probability per period
+  //in_break = index after maturity that will be covered by in_prdi
   double ImpliedPD1(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0, const double& in_prdi, const int& in_break) const;
 
-  //this function calculates the intermediate default intensity given two prior default intensities - good for 2 intermediary periods = 3 periods total
-  //in_prdi0 = prior default intensity for first intermediate period
-  //in_break0 = index after maturity that will be covered by intermediate default intensity 0 (first period)
-  //in_prdi1 = prior default intensity for second intermediate period
-  //in_break1 = index after maturity that will be coverd by intermediate default intensity 1 (second period)
+  //this function calculates the intermediate unconditional default probability given two prior ones - good for 2 intermediary periods = 3 periods total
+  //in_prdi0 = prior unconditional default probability for first intermediate period
+  //in_break0 = index after maturity that will be covered by in_prdi0 (first period)
+  //in_prdi1 = prior unconditional default probability for second intermediate period
+  //in_break1 = index after maturity that will be coverd by in_prdi1 (second period)
   double ImpliedPD2(const std::vector<double>& in_zeros, const double& in_rr, const double& in_yld0, const double& in_prdi0, const int& in_break0, const double& in_prdi1, const int& in_break1) const;
 
 };
