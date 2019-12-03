@@ -69,7 +69,10 @@ int main()
   }
 
   //Now we do the analysis for real bonds
-  
+  double rf_1mo = 1.75/100.0;
+  double rf_2mo = 1.69/100.0;
+  double rf_3mo = 1.65/100.0;
+  double rf_6mo = 1.64/100.0;
   double rf_1yr = 1.59/100.0;
   double rf_2yr = 1.60/100.0;
   double rf_3yr = 1.59/100.0;
@@ -123,6 +126,10 @@ int main()
     GE_ipds << "GE1 yield: " << GE1y << std::endl;
 
     std::vector<double> zeros1(mats1.size(), rf_1yr); 
+
+    //make it closer to actual treasury yield curve data
+    zeros1[0] = rf_1mo;
+    zeros1[1] = rf_6mo;
     
     double GE1_pd = GE1.ImpliedPD(zeros1, rr0, GE1y);
 
@@ -153,6 +160,13 @@ int main()
     GE_ipds << "\nGE3 bond yield: " << GE3y << std::endl;
 
     std::vector<double> zeros3(mats3.size(), rf_3yr);
+
+    //make the zero curve more accurate
+    zeros3[0] = rf_6mo;
+    zeros3[1] = rf_1yr;
+    zeros3[2] = rf_1yr;
+    zeros3[3] = rf_2yr;
+    zeros3[4] = rf_2yr;
     
     double GE3_pd = GE3.ImpliedPD(zeros3, rr0, GE3y);
 
@@ -188,6 +202,13 @@ int main()
 
     std::vector<double> zeros5(mats5.size(), rf_5yr);
 
+    //make the zeros curve more accurate
+    zeros5[0] = rf_1mo;
+    zeros5[1] = rf_6mo;
+    for (int i = 2; i < 4; ++i) zeros5[i] = rf_1yr;
+    for (int i = 4; i < 6; ++i) zeros5[i] = rf_2yr;
+    for (int i = 6; i < 10; ++i) zeros5[i] = rf_3yr;
+    
     double GE5_pd = GE5.ImpliedPD(zeros5, rr0, GE5y);
 
     GE_ipds << "GE5 implied pd: " << GE5_pd << std::endl;
